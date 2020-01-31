@@ -31,9 +31,11 @@ limitations under the License.
 #include <limits>
 #include <chrono>
 
+#include "state.cpp"
+
 using namespace std;
 
-typedef vector<int> State;
+//typedef vector<int> State;
 
 //  .---.
 //  |2|0|
@@ -41,18 +43,11 @@ typedef vector<int> State;
 //  |1|3|
 //  .---.
 
-typedef pair<int,int> Move;
 
 typedef function<int( const State& pos )> Heuristic;
 
-int 
-side( const State& b )
-{
-  double y = sqrt( b.size() );
-  int x = y;
-  return x;
-}
 
+//Heuristique de Manhattan
 int 
 manh( const State& b )
 {
@@ -69,6 +64,8 @@ manh( const State& b )
   return d;
 }
 
+
+//Heuristique des mal placés
 int
 nbmis( const State& b )
 {
@@ -83,29 +80,6 @@ nbmis( const State& b )
   return d;
 }
 
-bool
-finalState( const State& b )
-{
-  return (nbmis(b) == 0); // we use nbmis for it is quick to compute
-}
-
-void
-print( const State& state )
-{
-  int s = side(state);
-  for( int i = 0 ; i < state.size() ; i++ )
-  {
-    if( i % s == 0 ) cout << endl;
-    cout << setw(2) << setfill('0') << state[i] << " , ";
-  }
-  cout << endl;
-}
-
-void
-doMove( State &state, const Move &move )
-{
-  swap( state[move.first] , state[move.second] );
-}
 
 void
 addNeighbor( State &currentState, Move &move, 
@@ -119,6 +93,8 @@ addNeighbor( State &currentState, Move &move,
   }
   doMove( currentState, move );
 }
+
+
 
 void
 search( State& currentState,
@@ -204,6 +180,8 @@ search( State& currentState,
     }
   }
 }
+
+
 
 void
 ida( State&        initialState, 
