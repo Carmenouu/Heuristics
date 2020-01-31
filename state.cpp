@@ -21,6 +21,10 @@ public:
     void doMove(Move m);
     // Precondition: 0 <= m.first < getNbStacks(), 0 <= m.second < getNbStacks(), and !emptyStack(m.first)
     // Apply the doMove (m.first->m.second) to this
+
+    void undoMove(Move m);
+    // Precondition: 0 <= m.first < getNbStacks(), 0 <= m.second < getNbStacks(), and !emptyStack(m.first)
+    // Apply the doMove (m.second->m.first) to this
     
     int heuristic(int level);
     // Return a lower bound on the minimal number of moves necessary to transform this into the final state
@@ -121,6 +125,17 @@ void State::doMove(Move m){
     top[m.second] = b1;
     top[m.first] = bb1;
     stack[b1] = m.second;
+}
+
+void State::undoMove(Move m){
+    // Precondition: 0 <= m.first < getNbStacks(), 0 <= m.second < getNbStacks(), and !emptyStack(m.first)
+    // Apply the doMove (s2->s1) to this
+    int swapStock;
+
+    swapStock = m.first;
+    m.first = m.second;
+    m.second = swapStock;
+    doMove(m);
 }
 
 void displayStack(int s, int* next){
