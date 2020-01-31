@@ -35,17 +35,9 @@ limitations under the License.
 
 using namespace std;
 
-//typedef vector<int> State;
-
-//  .---.
-//  |2|0|
-//  .---. -> State b = {2,0,1,3}
-//  |1|3|
-//  .---.
-
 
 typedef function<int( const State& pos )> Heuristic;
-
+typedef State::Move Move ;
 
 void
 addNeighbor( State &currentState, Move &move, 
@@ -77,44 +69,33 @@ search( State& currentState,
   int f; // under-estimation of optimal length
   int g = path.size() - 1; // size of the current path to currentState
 
-  if( finalState( currentState ) )
+  if( currentState.isFinal() )
   {
     bestPath = path;
     return;
   }
 
   // generate the neighbors
-  int s = side( currentState );
+  int nbStacks = currentState.getNbStacks();
+  int stack, stack2 ;
   vector< pair< Move,int > > neighbors;
   neighbors.clear();
   
-  int pos0 = find( currentState.begin(), currentState.end(), 0 ) - currentState.begin();
-  
-  if( (pos0 + 1) < currentState.size() &&
-      ((pos0 + 1) % s) != 0 )
+  for (stack=0 ; stack<nbStacks ; stack++) //Boucle parcourant les piles
   {
-    Move move = make_pair( pos0, pos0 + 1 );
-    addNeighbor( currentState, move, neighbors, path, h );
+	if (!currentState.emptyStack(stack))
+	{
+	  for (stack2=0 ; stack2<nbStacks ; stack2++) // Seconde boucle parcourant les autres piles (afin de voir si le move est possible)
+	  {
+        if (stack2 != stack)
+		{
+	    Move move = make_pair(stack, stack2);
+	    addNeighbor( currentState, move, neighbors, path, h );
+		}
+	  }
+	}
   }
-  
-  if( (pos0 - 1) >= 0 &&
-      ((pos0 - 1) % s) != (s-1) )
-  {
-    Move move = make_pair( pos0, pos0 - 1 );
-    addNeighbor( currentState, move, neighbors, path, h );
-  }
-  
-  if( (pos0 + s) < currentState.size() )
-  {
-    Move move = make_pair( pos0, pos0 + s );
-    addNeighbor( currentState, move, neighbors, path, h );
-  }
-  
-  if( (pos0 - s) >= 0 )
-  {
-    Move move = make_pair( pos0, pos0 - s );
-    addNeighbor( currentState, move, neighbors, path, h );
-  }
+
 
   // sort the neighbors by heuristic value
 
@@ -141,7 +122,7 @@ search( State& currentState,
       path.push_back( currentState );
       search( currentState, ub, nub, path, bestPath, h, nbVisitedState );
       path.pop_back();
-      currentState.doMove( p.first );
+      currentState.undoMove( p.first );
       if( !bestPath.empty() ) return;
     }
   }

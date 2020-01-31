@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++11 -O3
 LDFLAGS=
-SOURCES=main.cpp
+SOURCES=idastar.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=blocs
 
