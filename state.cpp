@@ -183,3 +183,17 @@ int State::compare(const int* stack2, const int* top2, const int* next2) const{
     }
     return 0;
 }
+
+int State::heuristic(int level)
+{
+    int returnValue = 0;
+
+    switch (level)
+    {
+        case 0:
+        default:
+            returnValue = 0;
+    }
+
+    return returnValue;
+}
