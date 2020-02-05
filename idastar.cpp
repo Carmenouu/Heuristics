@@ -153,17 +153,33 @@ ida( State&        initialState,
 }
 
 int
-main()
+main(int argc, char **argv)
 {
   int nbStacks = 3 ;
   int nbBlocks = 4 ;
+  int nHeuristic = 0;
+
+  if (argc != 4)
+    printf("Utilisation des paramètres par défaut : 3 stacks, 4 blocs, heuristique nulle.\n\n");
+  else
+  {
+    nbStacks = atoi(argv[1]);
+    nbBlocks = atoi(argv[2]);
+    nHeuristic = atoi(argv[3]);
+    if (nbStacks < 1 || nbBlocks < 1 || nHeuristic < 0)
+    {
+      printf("Erreur : mauvaises valeurs de paramètres.\n");
+      exit(1);
+    }
+  }
+
   State state = State(nbBlocks, nbStacks);
   list<State> bestPath;
   int nbVisitedState = 0;
   state.setInitial();
 
   auto start = std::chrono::high_resolution_clock::now();
-  ida( state, 1, bestPath, nbVisitedState );
+  ida( state, nHeuristic, bestPath, nbVisitedState );
   auto finish = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = finish - start;
   cout << "Elapsed time: " << elapsed.count() << " s\n";
