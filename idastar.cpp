@@ -160,7 +160,7 @@ main(int argc, char **argv)
   int nHeuristic = 0;
 
   if (argc != 4)
-    printf("Utilisation des paramètres par défaut : 3 stacks, 4 blocs, heuristique nulle.\n\n");
+    cout << "Utilisation des paramètres par défaut : 3 stacks, 4 blocs, heuristique nulle.\n" << endl;
   else
   {
     nbStacks = atoi(argv[1]);
@@ -168,7 +168,7 @@ main(int argc, char **argv)
     nHeuristic = atoi(argv[3]);
     if (nbStacks < 1 || nbBlocks < 1 || nHeuristic < 0)
     {
-      printf("Erreur : mauvaises valeurs de paramètres.\n");
+      cerr << "Erreur : mauvaises valeurs de paramètres." << endl;
       exit(1);
     }
   }
