@@ -49,6 +49,10 @@ public:
 		//la dernière pile et +1 encore pour chaque block < au block
 		//d'en-dessous
 		
+		int misLastStack();
+		//Heuristique qui ajoute +1 pour chaque block qui est sur
+		//la dernière pile mais inférieur aux blocs au dessus de lui
+		
 		~State();
 		// Destructor
 		
@@ -214,6 +218,9 @@ int State::heuristic(int level)
 				case 1:
 					returnValue = misStacks();
 					break;
+				case 2:
+					returnValue = misLastStack();
+					break;
 				case 0:
 				default:
 						returnValue = 0;
@@ -231,7 +238,7 @@ int State::misStacks()
 	for(stack=0; stack < nbStacks-1;stack++)
 	{
 		block = top[stack];
-		while(block != -1)
+		while(block != -1 && next[block] != -1) //On regarde d'abord le block courant au cas où la pile serait vide
 		{
 			if(block < next[block])
 			{
@@ -242,4 +249,33 @@ int State::misStacks()
 		}
 	}
 	return h;
+}
+
+int State::misLastStack()
+{
+	int h = 0;
+	int round = 1 ;
+	int block, block2;
+	
+	block = top[nbStacks-1];
+	
+	while(block != -1 && next[block] != -1) //On regarde d'abord le block courant au cas où la pile serait vide
+	{
+		block2 = next[block] ;
+		round = 1;
+		
+		while(block2 != -1 && next[block2] != -1) //On regarde d'abord le block courant au cas où la pile serait vide
+		{
+			if(block2 < block)
+			{
+				h+=round;
+				round++ ;
+			}
+			block2 = next[block2];
+		}
+		
+		block = next[block] ;
+	}
+	
+	return h ;
 }
