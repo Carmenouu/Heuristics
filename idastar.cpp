@@ -156,14 +156,14 @@ int
 main()
 {
   int nbStacks = 3 ;
-  int nbBlocks = 4 ;
+  int nbBlocks = 8 ;
   State state = State(nbBlocks, nbStacks);
   list<State> bestPath;
   int nbVisitedState = 0;
   state.setInitial();
 
   auto start = std::chrono::high_resolution_clock::now();
-  ida( state, 1, bestPath, nbVisitedState );
+  ida( state, 0, bestPath, nbVisitedState );
   auto finish = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = finish - start;
   cout << "Elapsed time: " << elapsed.count() << " s\n";
