@@ -221,6 +221,9 @@ int State::heuristic(int level)
 				case 2:
 					returnValue = misLastStack();
 					break;
+				case 3:
+					returnValue = misLastStack() + misStacks() ;
+					break;
 				case 0:
 				default:
 						returnValue = 0;
@@ -254,7 +257,6 @@ int State::misStacks()
 int State::misLastStack()
 {
 	int h = 0;
-	int round = 1 ;
 	int block, block2;
 	
 	block = top[nbStacks-1];
@@ -262,14 +264,12 @@ int State::misLastStack()
 	while(block != -1 && next[block] != -1) //On regarde d'abord le block courant au cas où la pile serait vide
 	{
 		block2 = next[block] ;
-		round = 1;
 		
-		while(block2 != -1 && next[block2] != -1) //On regarde d'abord le block courant au cas où la pile serait vide
+		while(block2 != -1) //On regarde d'abord le block courant au cas où la pile serait vide
 		{
 			if(block2 < block)
 			{
-				h+=round;
-				round++ ;
+				h+=2;
 			}
 			block2 = next[block2];
 		}
