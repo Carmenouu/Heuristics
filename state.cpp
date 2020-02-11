@@ -236,20 +236,27 @@ int State::heuristic(int level)
 int State::misStacks()
 {
 	int h = 0;
-	int stack, block;
+	int stack, block, block2;
 
 	for(stack=0; stack < nbStacks-1;stack++)
 	{
 		block = top[stack];
-		while(block != -1 && next[block] != -1) //On regarde d'abord le block courant au cas où la pile serait vide
+		while (block != -1)
 		{
-			if(block < next[block])
+			block2 = next[block];
+			while(block2 != -1) //On regarde d'abord le block courant au cas où la pile serait vide
 			{
-				h++;
+				if(block < block2)
+				{
+					h++;
+					break;
+				}
+				block2 = next[block2];
 			}
-			block = next[block];
-			h++;
+			h++ ;
+			block = next[block] ;
 		}
+		
 	}
 	return h;
 }
